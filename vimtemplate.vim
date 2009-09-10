@@ -326,7 +326,7 @@ func! s:close_main_buffer()
 endfunc
 " }}}2
 
-" s:get_tempname {{{
+" s:get_tempname() {{{
 func! s:get_tempname()
     if s:tempname == ''
         let s:tempname = tempname().localtime()
@@ -335,7 +335,7 @@ func! s:get_tempname()
 endfunc
 " }}}
 
-" s:multi_setline{{{
+" s:multi_setline(lines) {{{
 func! s:multi_setline(lines) "{{{
     " delete all
     %delete _
