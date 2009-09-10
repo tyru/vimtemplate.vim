@@ -309,9 +309,9 @@ func! s:close_list_buffer()
     if winnr('$') == 1
         new
         wincmd w
-        quit
+        close
     else
-        quit
+        close
         " switch to caller window
         execute s:caller_winnr . 'wincmd w'
     endif
