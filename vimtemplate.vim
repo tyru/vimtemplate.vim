@@ -326,19 +326,32 @@ func! s:close_main_buffer()
 endfunc
 " }}}2
 
-" s:multi_setline(lines) {{{2
-func! s:multi_setline(lines)
-    %delete _
-
-    let i = 1
-    for file in a:lines
-        call setline(i, file)
-        normal! o
-        let i = i + 1
-    endfor
-    delete _
+" s:get_tempname {{{
+func! s:get_tempname()
+    if s:tempname == ''
+        let s:tempname = tempname().localtime()
+    endif
+    return s:tempname
 endfunc
-" }}}2
+" }}}
+
+" s:multi_setline{{{
+func! s:multi_setline(lines) "{{{
+    " delete all
+    %delete _
+    " write all lines to tempname() . localtime()
+    while 1
+        let tmpname = s:get_tempname()
+        if writefile(a:lines, tmpname) != -1
+            break
+        endif
+    endwhile
+    " read it
+    silent execute 'read '.tmpname
+    " delete waste top of blank line
+    normal! ggdd
+endfunc
+" }}}
 
 " s:show_files_list() {{{2
 func! s:show_files_list()
