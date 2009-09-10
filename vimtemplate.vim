@@ -328,7 +328,7 @@ endfunc
 " }}}
 
 " s:multi_setline(lines) {{{
-func! s:multi_setline(lines) "{{{
+func! s:multi_setline(lines)
     " delete all
     %delete _
     " write all lines to tempname() . localtime()
