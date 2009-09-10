@@ -279,8 +279,8 @@ func! s:eval_modeline(line, path)
 endfunc
 " }}}2
 
-" s:open_file() {{{2
-func! s:open_file()
+" s:open_file_on_cursol() {{{2
+func! s:open_file_on_cursol()
     " get path of template file
     let template_path = getline('.')
     if template_path == '' | return | endif
@@ -305,28 +305,16 @@ endfunc
 
 " s:close_list_buffer() {{{2
 func! s:close_list_buffer()
-    if winnr('$') == 1
-        " if this is last window
-        new
-        wincmd w
-        close
-    else
+    if winnr('$') != 1
         close
         " switch to caller window
         let winnr = bufwinnr(s:caller_bufnr)
         if winnr == -1
-            call s:warn("internal error!")
+            return
         endif
         execute winnr.'wincmd w'
     endif
     let s:caller_bufnr = -1
-endfunc
-" }}}2
-
-" s:close_main_buffer() {{{2
-func! s:close_main_buffer()
-    let s:caller_bufnr = -1
-    close
 endfunc
 " }}}2
 
@@ -391,8 +379,8 @@ func! s:show_files_list()
     setlocal nomodifiable
     setlocal noswapfile
 
-    nnoremap <buffer><silent> <CR>  :call <SID>open_file()<CR>
-    nnoremap <buffer><silent> q     :call <SID>close_main_buffer()<CR>
+    nnoremap <buffer><silent> <CR>  :call <SID>open_file_on_cursol()<CR>
+    nnoremap <buffer><silent> q     :call <SID>close_list_buffer()<CR>
 
     file __template__
 endfunc
