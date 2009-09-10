@@ -369,13 +369,13 @@ func! s:show_files_list()
 
     " open list buffer
     execute printf('%dnew', g:vt_list_buf_height)
-    let s:caller_bufnr = bufnr('%')
-
     " no template directory
     if !isdirectory(expand(g:vt_template_dir_path))
+        close
         call s:warn("No such dir: " . expand(g:vt_template_dir_path))
         return
     endif
+    let s:caller_bufnr = bufnr('%')
 
     " write template files list to main buffer
     let template_files_list = s:glob_path_list(expand(g:vt_template_dir_path), '*')
