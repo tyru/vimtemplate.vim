@@ -6,7 +6,10 @@ scriptencoding utf-8
 " Name: vimtemplate
 " Version: 0.0.4
 " Author:  tyru <tyru.exe@gmail.com>
-" Last Change: 2009-06-02.
+" Last Change: 2009-09-10.
+"
+" Description:
+"   MRU-like simple template management plugin
 "
 " Change Log: {{{2
 "   0.0.0: Initial upload.
@@ -96,7 +99,7 @@ scriptencoding utf-8
 " }}}2
 "
 " TODO: {{{2
-"   implement auto loading file(autocmd)
+"   - implement auto loading file(autocmd)
 " }}}2
 "==================================================
 " }}}1
@@ -112,6 +115,7 @@ set cpo&vim
 
 " SCOPED VARIABLES {{{1
 let s:caller_winnr = -1
+let s:tempname = ''
 " }}}1
 " GLOBAL VARIABLES {{{1
 if !exists('g:vt_template_dir_path')
@@ -148,10 +152,18 @@ endfunc
 
 " s:glob_path_list(path, expr) {{{2
 func! s:glob_path_list(path, expr)
+    " get list of files
     let files = split(globpath(a:path, a:expr), '\n')
+
+    " TODO simplify
+
+    " delete dirname
     call map(files, 'fnamemodify(v:val, ":t")')
+    " get rid of '.' and '..'
     call filter(files, 'v:val !=# "." && v:val !=# ".."')
+    " add dirname
     call map(files, 'a:path . "/" . v:val')
+
     return files
 endfunc
 " }}}2
@@ -334,7 +346,9 @@ func! s:show_files_list()
     if s:caller_winnr != -1 | return | endif
     let s:caller_winnr = winnr()
 
+    " open list buffer
     execute printf('%dnew', g:vt_list_buf_height)
+    " no template directory
     if !isdirectory(expand(g:vt_template_dir_path))
         call s:warn("No such dir: " . expand(g:vt_template_dir_path))
         return
