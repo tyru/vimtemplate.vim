@@ -114,7 +114,7 @@ set cpo&vim
 " }}}1
 
 " SCOPED VARIABLES {{{1
-let s:caller_winnr = -1
+let s:caller_bufnr = -1
 let s:tempname = ''
 " }}}1
 " GLOBAL VARIABLES {{{1
@@ -305,23 +305,27 @@ endfunc
 
 " s:close_list_buffer() {{{2
 func! s:close_list_buffer()
-    " if this is last window
     if winnr('$') == 1
+        " if this is last window
         new
         wincmd w
         close
     else
         close
         " switch to caller window
-        execute s:caller_winnr . 'wincmd w'
+        let winnr = bufwinnr(s:caller_bufnr)
+        if winnr == -1
+            call s:warn("internal error!")
+        endif
+        execute winnr.'wincmd w'
     endif
-    let s:caller_winnr = -1
+    let s:caller_bufnr = -1
 endfunc
 " }}}2
 
 " s:close_main_buffer() {{{2
 func! s:close_main_buffer()
-    let s:caller_winnr = -1
+    let s:caller_bufnr = -1
     close
 endfunc
 " }}}2
@@ -356,11 +360,17 @@ endfunc
 " s:show_files_list() {{{2
 func! s:show_files_list()
 
-    if s:caller_winnr != -1 | return | endif
-    let s:caller_winnr = winnr()
+    " return if window exists
+    let winnr = bufwinnr(s:caller_bufnr)
+    if winnr != -1
+        execute winnr.'wincmd w'
+        return
+    endif
 
     " open list buffer
     execute printf('%dnew', g:vt_list_buf_height)
+    let s:caller_bufnr = bufnr('%')
+
     " no template directory
     if !isdirectory(expand(g:vt_template_dir_path))
         call s:warn("No such dir: " . expand(g:vt_template_dir_path))
@@ -374,7 +384,7 @@ func! s:show_files_list()
 
     """ settings """
 
-    setlocal bufhidden=unload
+    setlocal bufhidden=delete
     setlocal buftype=nofile
     setlocal cursorline
     setlocal nobuflisted
