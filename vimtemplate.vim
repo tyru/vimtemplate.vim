@@ -6,7 +6,7 @@ scriptencoding utf-8
 " Name: vimtemplate
 " Version: 0.0.5
 " Author:  tyru <tyru.exe@gmail.com>
-" Last Change: 2009-09-11.
+" Last Change: 2009-09-12.
 "
 " Description:
 "   MRU-like simple template management plugin
@@ -68,6 +68,7 @@ scriptencoding utf-8
 "
 "       g:vt_mapping (default:"gt")
 "           mapping.
+"           if this is empty string, won't define the mapping.
 "
 "       g:vt_list_buf_height (default:7)
 "           height of list buffer.
@@ -410,7 +411,7 @@ func! s:show_files_list()
 
     """ settings """
 
-    setlocal bufhidden=delete
+    setlocal bufhidden=wipe
     setlocal buftype=nofile
     setlocal cursorline
     setlocal nobuflisted
