@@ -26,14 +26,26 @@ scriptencoding utf-8
 "
 " My .vimrc setting: {{{2
 "   let g:vt_template_dir_path = expand("$HOME/.vim/template")
-"   let g:vt_command = ''
+"   let g:vt_command = ""
 "   let g:vt_author = "tyru"
 "   let g:vt_email = "tyru.exe@gmail.com"
 "
-"   " all files
-"   let s:tmp = split(glob(g:vt_template_dir_path.'/*'), "\n")
-"   let g:vt_filetype_files = join(s:tmp, ',')
-"   unlet s:tmp
+"   let s:files_tmp = {
+"       \'cppsrc.cpp'    : "cpp",
+"       \'csharp.cs'     : "cs",
+"       \'csrc.c'        : "c",
+"       \'header.h'      : "c",
+"       \'hina.html'     : "html",
+"       \'javasrc.java'  : "java",
+"       \'perl.pl'       : "perl",
+"       \'perlmodule.pm' : "perl",
+"       \'python.py'     : "python",
+"       \'scala.scala'   : "scala",
+"       \'scheme.scm'    : "scheme",
+"       \'vimscript.vim' : "vim"
+"   \}
+"   let g:vt_filetype_files = join(map(keys(s:files_tmp), 'v:val . "=" . s:files_tmp[v:val]'), ',')
+"   unlet s:files_tmp
 " }}}2
 "
 " Usage: {{{2
@@ -131,6 +143,7 @@ set cpo&vim
 " SCOPED VARIABLES {{{1
 let s:caller_bufnr = -1
 let s:tempname = ''
+let s:cache_filetype_files = { 'cached':0, 'filenames':{} }
 " }}}1
 " GLOBAL VARIABLES {{{1
 if !exists('g:vt_template_dir_path')
@@ -184,18 +197,27 @@ endfunc
 " }}}2
 
 " s:get_filetype_of(path) {{{2
+" NOTE: a:path must exist.
 func! s:get_filetype_of(path)
-    for pair in split(g:vt_filetype_files, ',')
-        let [fname; filetype] = split(pair, '=')
-        if empty(filetype) | continue | endif
 
-        " TODO think win32 platform. use fnamemodify().
-        if get(split(a:path, '/'), -1, 123) ==# fname
-            return filetype[0]
-        endif
-    endfor
+    if ! s:cache_filetype_files.cached
+        " save cache to s:cache_filetype_files
+        for pair in split(g:vt_filetype_files, ',')
+            let [fname_tail; filetype] = split(pair, '=')
+            if empty(filetype) | continue | endif
 
-    return ''
+            let s:cache_filetype_files.filenames[fname_tail] = filetype[0]
+        endfor
+        " cached
+        let s:cache_filetype_files.cached = 1
+    endif
+
+    let tail = fnamemodify(a:path, ':t')
+    if has_key(s:cache_filetype_files.filenames, tail)
+        return s:cache_filetype_files.filenames[tail]
+    else
+        return ''
+    endif
 endfunc
 " }}}2
 
