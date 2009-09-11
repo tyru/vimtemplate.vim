@@ -4,9 +4,9 @@ scriptencoding utf-8
 " DOCUMENT {{{1
 "==================================================
 " Name: vimtemplate
-" Version: 0.0.4
+" Version: 0.0.5
 " Author:  tyru <tyru.exe@gmail.com>
-" Last Change: 2009-09-10.
+" Last Change: 2009-09-11.
 "
 " Description:
 "   MRU-like simple template management plugin
@@ -21,6 +21,19 @@ scriptencoding utf-8
 "   0.0.3: add <%author%>, <%email%>, <%filename_camel%>, <%filename_snake%>
 "   0.0.4: delete g:vt_files_using_template. and support modeline in
 "   template file.
+"   0.0.5: speed optimization and fix bugs.
+" }}}2
+"
+" My .vimrc setting: {{{2
+"   let g:vt_template_dir_path = expand("$HOME/.vim/template")
+"   let g:vt_command = ''
+"   let g:vt_author = "tyru"
+"   let g:vt_email = "tyru.exe@gmail.com"
+"
+"   " all files
+"   let s:tmp = split(glob(g:vt_template_dir_path.'/*'), "\n")
+"   let g:vt_filetype_files = join(s:tmp, ',')
+"   unlet s:tmp
 " }}}2
 "
 " Usage: {{{2
@@ -39,6 +52,7 @@ scriptencoding utf-8
 "
 "       g:vt_command (default:"VimTemplate")
 "           command name.
+"           if this is empty string, won't define the command.
 "
 "       g:vt_mapping (default:"gt")
 "           mapping.
@@ -48,7 +62,7 @@ scriptencoding utf-8
 "           buffer shows you list of template files.
 "
 "       g:vt_filetype_files (default: "")
-"           when you load one of these files, exec :setlocal ft=<filetype>.
+"           when you load one of these files or exec :setlocal ft=<filetype>.
 "           search these files in your g:vt_template_dir_path.
 "           e.g.: "java_template.java=java,cpp_template.cpp=cpp"
 "
@@ -100,6 +114,7 @@ scriptencoding utf-8
 "
 " TODO: {{{2
 "   - implement auto loading file(autocmd)
+"   - have g:vt_filetype_files as hash.
 " }}}2
 "==================================================
 " }}}1
@@ -174,6 +189,7 @@ func! s:get_filetype_of(path)
         let [fname; filetype] = split(pair, '=')
         if empty(filetype) | continue | endif
 
+        " TODO think win32 platform. use fnamemodify().
         if get(split(a:path, '/'), -1, 123) ==# fname
             return filetype[0]
         endif
