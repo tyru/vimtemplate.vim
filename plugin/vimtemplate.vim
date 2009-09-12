@@ -127,7 +127,6 @@ scriptencoding utf-8
 "
 " TODO: {{{2
 "   - implement auto loading file(autocmd)
-"   - have g:vt_filetype_files as hash.
 " }}}2
 "==================================================
 " }}}1
