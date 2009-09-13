@@ -256,10 +256,13 @@ func! s:expand_template_syntax(line, path)
         else
             if lis[1] ==# 'path'
                 let replaced = path
+
             elseif lis[1] ==# 'filename'
                 let replaced = fnamemodify(path, ':t')
+
             elseif lis[1] ==# 'filename_noext'
                 let replaced = fnamemodify(path, ':t:r')
+
             elseif lis[1] ==# 'filename_camel'
                 let replaced = fnamemodify(path, ':t:r')
                 let m = get(matchlist(replaced, '_.'), 0, '')
@@ -268,15 +271,21 @@ func! s:expand_template_syntax(line, path)
                     let m = get(matchlist(replaced, '_.'), 0, '')
                 endwhile
                 let replaced = toupper(replaced[0]) . replaced[1:]
+
             elseif lis[1] ==# 'filename_snake'
                 let replaced = fnamemodify(path, ':t:r')
-                let l = split(replaced, '\zs')
-                let mapped = map(l, 'v:val =~# "[A-Z]" ? "_".tolower(v:val) : v:val')
-                let replaced = join(mapped, '')
+                let camels = split(replaced, '\%([A-Z]\)\@=')
+                let camels =
+                            \[tolower(strpart(camels[0], 0, 1)).strpart(camels[0], 1)] +
+                            \map(camels[1:], '"_".tolower(strpart(v:val, 0, 1)).strpart(v:val, 1)')
+                let replaced = join(camels, '')
+
             elseif lis[1] ==# 'parent_dir'
                 let replaced = fnamemodify(path, ':p:h')
+
             elseif lis[1] ==# 'author'
                 let replaced = g:vt_author
+
             elseif lis[1] ==# 'email'
                 let replaced = g:vt_email
             endif
