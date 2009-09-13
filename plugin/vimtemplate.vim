@@ -30,6 +30,7 @@ scriptencoding utf-8
 "             now is expanded to 'foo_bar'.
 "       - more speed optimization
 "       - <%filename_camel%> now supports '-' and '_' in filename
+"       - implement <%filename_ext%> as template syntax
 " }}}2
 "
 " My .vimrc setting: {{{2
