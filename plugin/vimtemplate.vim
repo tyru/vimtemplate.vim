@@ -4,7 +4,7 @@ scriptencoding utf-8
 " DOCUMENT {{{1
 "==================================================
 " Name: vimtemplate
-" Version: 0.0.5
+" Version: 0.0.6
 " Author:  tyru <tyru.exe@gmail.com>
 " Last Change: 2009-09-13.
 "
@@ -22,6 +22,14 @@ scriptencoding utf-8
 "   0.0.4: delete g:vt_files_using_template. and support modeline in
 "   template file.
 "   0.0.5: speed optimization and fix bugs.
+"   0.0.6:
+"       - fix bugs:
+"           - did not ignore whitespaces in <% ... %>
+"           - if filename is 'FooBar.baz',
+"             <%filename_snake%> was expanded to '_foo_bar'.
+"             now is expanded to 'foo_bar'.
+"       - more speed optimization
+"       - <%filename_camel%> now supports '-' and '_' in filename
 " }}}2
 "
 " My .vimrc setting: {{{2
@@ -112,6 +120,24 @@ scriptencoding utf-8
 "       <%filename_noext%>
 "           will expand into current file name without extension.
 "           same as <%eval:expand('%:t:r')%>.
+"
+"       <%filename_ext%>
+"           will expand into current filename's extension.
+"           same as <%eval:expand('%:e')%>.
+"
+"       <%filename_camel%>
+"         will expand into camel case of expand('%:t:r').
+"         so extension is not added to result.
+"
+"         e.g.:
+"             foo-bar.baz => FooBar
+"             foo_bar.baz => FooBar
+"
+"       <%filename_snake%>
+"         will expand into snake case of expand('%:t:r').
+"         so extension is not added to result.
+"
+"         e.g.: FooBar.baz => foo_bar
 "
 "       <%parent_dir%>
 "           will expand into current file's dir.
