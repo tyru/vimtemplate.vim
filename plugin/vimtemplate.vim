@@ -289,6 +289,9 @@ func! s:expand_template_syntax(line, path)
             elseif lis[1] ==# 'filename_noext'
                 let replaced = fnamemodify(path, ':t:r')
 
+            elseif lis[1] ==# 'filename_ext'
+                let replaced = fnamemodify(path, ':e')
+
             elseif lis[1] ==# 'filename_camel'
                 let replaced = fnamemodify(path, ':t:r')
                 let m = get(matchlist(replaced, '[-_].'), 0, '')
