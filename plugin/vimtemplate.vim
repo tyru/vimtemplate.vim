@@ -265,10 +265,10 @@ func! s:expand_template_syntax(line, path)
 
             elseif lis[1] ==# 'filename_camel'
                 let replaced = fnamemodify(path, ':t:r')
-                let m = get(matchlist(replaced, '_.'), 0, '')
+                let m = get(matchlist(replaced, '[-_].'), 0, '')
                 while m != ''
                     let replaced = substitute(replaced, m, toupper(m[1]), '')
-                    let m = get(matchlist(replaced, '_.'), 0, '')
+                    let m = get(matchlist(replaced, '[-_].'), 0, '')
                 endwhile
                 let replaced = toupper(replaced[0]) . replaced[1:]
 
