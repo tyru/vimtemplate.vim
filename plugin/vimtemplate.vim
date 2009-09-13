@@ -6,7 +6,7 @@ scriptencoding utf-8
 " Name: vimtemplate
 " Version: 0.0.5
 " Author:  tyru <tyru.exe@gmail.com>
-" Last Change: 2009-09-12.
+" Last Change: 2009-09-13.
 "
 " Description:
 "   MRU-like simple template management plugin
@@ -116,7 +116,7 @@ scriptencoding utf-8
 "       <%parent_dir%>
 "           will expand into current file's dir.
 "           same as <%eval:expand('%:p:h')%>.
-"           
+"
 "       <%author%>
 "           same as <% eval: g:vt_author %>.
 "
@@ -242,7 +242,7 @@ endfunc
 " s:expand_template_syntax(line, path) {{{2
 func! s:expand_template_syntax(line, path)
     let line = a:line
-    let regex = '\m<%\(.\{-}\)%>'
+    let regex = '\m<%\s*\(.\{-}\)\s*%>'
     let path = expand('%') == '' ? a:path : expand('%')
     let replaced = ''
 
