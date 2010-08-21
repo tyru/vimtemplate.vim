@@ -157,18 +157,19 @@ EXAMPLE					*vimtemplate-example* {{{
 
 >
 	let g:vt_files_metainfo = {
-	\	'cppsrc.cpp'    : {'filetype': "cpp"},
-	\	'csharp.cs'     : {'filetype': "cs"},
-	\	'csrc.c'        : {'filetype': "c"},
-	\	'header.h'      : {'filetype': "c"},
-	\	'hina.html'     : {'filetype': "html"},
-	\	'javasrc.java'  : {'filetype': "java"},
-	\	'perl.pl'       : {'filetype': "perl"},
-	\	'perlmodule.pm' : {'filetype': "perl"},
-	\	'python.py'     : {'filetype': "python"},
-	\	'scala.scala'   : {'filetype': "scala"},
-	\	'scheme.scm'    : {'filetype': "scheme"},
-	\	'vimscript.vim' : {'filetype': "vim"},
+	\   'cppsrc-scratch.cpp': {'filetype': "cpp"},
+	\   'cppsrc.cpp'    : {'filetype': "cpp"},
+	\   'csharp.cs'     : {'filetype': "cs"},
+	\   'csrc.c'        : {'filetype': "c"},
+	\   'header.h'      : {'filetype': "c"},
+	\   'hina.html'     : {'filetype': "html"},
+	\   'javasrc.java'  : {'filetype': "java"},
+	\   'perl.pl'       : {'filetype': "perl"},
+	\   'perlmodule.pm' : {'filetype': "perl"},
+	\   'python.py'     : {'filetype': "python"},
+	\   'scala.scala'   : {'filetype': "scala"},
+	\   'scheme.scm'    : {'filetype': "scheme"},
+	\   'vimscript.vim' : {'filetype': "vim"}
 	\}
 
 }}}
