@@ -224,6 +224,16 @@ function! s:multi_setline(lines) "{{{
     call setreg('z', reg_z, reg_z_type)
 endfunction "}}}
 
+function! s:bufleave() "{{{
+    let winnr = bufwinnr(s:caller_bufnr)
+    if winnr == -1
+        return
+    endif
+    execute winnr 'wincmd w'
+
+    let s:caller_bufnr = -1
+endfunction "}}}
+
 function! s:show_files_list() "{{{
     " return if window exists
     let winnr = bufwinnr(s:caller_bufnr)
@@ -232,15 +242,13 @@ function! s:show_files_list() "{{{
         return
     endif
 
-    " open list buffer
-    execute g:vt_open_command
-
-    " no template directory
     if !isdirectory(expand(g:vt_template_dir_path))
-        close
         call s:warn("No such dir: " . expand(g:vt_template_dir_path))
         return
     endif
+
+    " open list buffer
+    execute g:vt_open_command
     let s:caller_bufnr = bufnr('%')
 
     " write template files list to main buffer
@@ -256,15 +264,6 @@ function! s:show_files_list() "{{{
     setlocal nomodifiable
     setlocal noswapfile
 
-    function! s:bufleave()
-        let winnr = bufwinnr(s:caller_bufnr)
-        if winnr == -1
-            return
-        endif
-        execute winnr 'wincmd w'
-
-        let s:caller_bufnr = -1
-    endfunction
     augroup vimtemplate
         autocmd!
         autocmd BufLeave * call s:bufleave()
