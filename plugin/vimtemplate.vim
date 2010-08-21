@@ -14,7 +14,6 @@ set cpo&vim
 
 " SCOPED VARIABLES {{{
 let s:caller_bufnr = -1
-let s:cache_filetype_files = { 'cached':0, 'filenames':{} }
 " }}}
 " GLOBAL VARIABLES {{{
 if !exists('g:vt_template_dir_path')
@@ -29,8 +28,8 @@ endif
 if !exists('g:vt_open_command')
     let g:vt_open_command = '7new'
 endif
-if !exists('g:vt_filetype_files')
-    let g:vt_filetype_files = ''
+if !exists('g:vt_files_metainfo')
+    let g:vt_files_metainfo = {}
 endif
 if !exists('g:vt_author')
     let g:vt_author = ''
@@ -51,37 +50,7 @@ function! s:warn(msg) "{{{
 endfunction "}}}
 
 function! s:glob(expr) "{{{
-    let files = split(glob(a:expr), '\n')
-
-    call map(files, 'fnamemodify(v:val, ":t")')
-    call filter(files, 'v:val !=# "." && v:val !=# ".."')
-
-    return files
-endfunction "}}}
-
-function! s:get_filetype_of(path) "{{{
-    " NOTE: a:path must exist.
-
-    if ! s:cache_filetype_files.cached
-        " save cache to s:cache_filetype_files
-        for pair in split(g:vt_filetype_files, ',')
-            let [fname_tail; filetype] = split(pair, '=')
-            if empty(filetype)
-                continue
-            endif
-
-            let s:cache_filetype_files.filenames[fname_tail] = filetype[0]
-        endfor
-        " cached
-        let s:cache_filetype_files.cached = 1
-    endif
-
-    let tail = fnamemodify(a:path, ':t')
-    if has_key(s:cache_filetype_files.filenames, tail)
-        return s:cache_filetype_files.filenames[tail]
-    else
-        return ''
-    endif
+    return split(glob(a:expr), '\n')
 endfunction "}}}
 
 function! s:apply_template(text, path) "{{{
@@ -187,10 +156,6 @@ endfunction "}}}
 function! s:buffer_open() "{{{
     " get path of template file
     let template_path = getline('.')
-    if template_path == ''
-        return
-    endif
-
     if !filereadable(template_path)
         call s:warn(printf("can't read '%s'", template_path))
         return
@@ -202,9 +167,13 @@ function! s:buffer_open() "{{{
     let text = s:apply_template(text, template_path)
     call s:multi_setline(text)
 
-    let ftype = s:get_filetype_of(template_path)
-    if ftype != ''
-        execute 'setlocal ft=' . ftype
+    let path = fnamemodify(template_path, ':t')
+    if has_key(g:vt_files_metainfo, path)
+        for [k, v] in items(g:vt_files_metainfo[path])
+            if k ==# 'filetype'
+                let &l:filetype = v
+            endif
+        endfor
     endif
 endfunction "}}}
 
@@ -252,7 +221,6 @@ function! s:show_files_list() "{{{
 
     " Write template files list to the buffer.
     let template_files_list = s:glob(template_dir . '/*')
-    call map(template_files_list, 'template_dir . "/" . v:val')
     call s:multi_setline(template_files_list)
 
     setlocal bufhidden=wipe
