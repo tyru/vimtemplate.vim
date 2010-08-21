@@ -26,8 +26,8 @@ endif
 if !exists('g:vt_no_default_mappings')
     let g:vt_no_default_mappings = 0
 endif
-if !exists('g:vt_list_buf_height')
-    let g:vt_list_buf_height = 7
+if !exists('g:vt_open_command')
+    let g:vt_open_command = '7new'
 endif
 if !exists('g:vt_filetype_files')
     let g:vt_filetype_files = ''
@@ -251,7 +251,7 @@ function! s:show_files_list() "{{{
     endif
 
     " open list buffer
-    execute printf('%dnew', g:vt_list_buf_height)
+    execute g:vt_open_command
     " no template directory
     if !isdirectory(expand(g:vt_template_dir_path))
         close
