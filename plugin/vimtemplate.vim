@@ -53,20 +53,14 @@ function! s:glob(expr) "{{{
     return split(glob(a:expr), '\n')
 endfunction "}}}
 
-function! s:compile_template(text, path) "{{{
-    let text = a:text
-    let [i, len] = [0, len(text)]
-
-    while i < len
-        " template syntax
-        let text[i] = s:expand_template_syntax(text[i], a:path)
-        " modeline in template file
-        call s:eval_modeline(text[i], a:path)
-
-        let i = i + 1
-    endwhile
-
-    return text
+function! s:compile_template(lines, path) "{{{
+    let ret = []
+    for text in a:lines
+        let text = s:expand_template_syntax(text, a:path)
+        call add(ret, text)
+        call s:eval_modeline(text, a:path)
+    endfor
+    return ret
 endfunction "}}}
 
 function! s:expand_template_syntax(line, path) "{{{
