@@ -41,16 +41,13 @@ endif
 " }}}
 
 " FUNCTION DEFINITION {{{
-" s:warn(msg) {{{
-func! s:warn(msg)
+func! s:warn(msg) "{{{
     echohl WarningMsg
     echo a:msg
     echohl None
-endfunc
-" }}}
+endfunc "}}}
 
-" s:glob_path_list(path, expr) {{{
-func! s:glob_path_list(path, expr)
+func! s:glob_path_list(path, expr) "{{{
     " get list of files
     let files = split(globpath(a:path, a:expr), '\n')
 
@@ -64,12 +61,10 @@ func! s:glob_path_list(path, expr)
     call map(files, 'a:path . "/" . v:val')
 
     return files
-endfunc
-" }}}
+endfunc "}}}
 
-" s:get_filetype_of(path) {{{
-" NOTE: a:path must exist.
-func! s:get_filetype_of(path)
+func! s:get_filetype_of(path) "{{{
+    " NOTE: a:path must exist.
 
     if ! s:cache_filetype_files.cached
         " save cache to s:cache_filetype_files
@@ -91,11 +86,9 @@ func! s:get_filetype_of(path)
     else
         return ''
     endif
-endfunc
-" }}}
+endfunc "}}}
 
-" s:apply_template(text, path) {{{
-func! s:apply_template(text, path)
+func! s:apply_template(text, path) "{{{
     let text = a:text
     let [i, len] = [0, len(text)]
 
@@ -109,11 +102,9 @@ func! s:apply_template(text, path)
     endwhile
 
     return text
-endfunc
-" }}}
+endfunc "}}}
 
-" s:expand_template_syntax(line, path) {{{
-func! s:expand_template_syntax(line, path)
+func! s:expand_template_syntax(line, path) "{{{
     let line = a:line
     let regex = '\m<%\s*\(.\{-}\)\s*%>'
     let path = expand('%') == '' ? a:path : expand('%')
@@ -173,11 +164,9 @@ func! s:expand_template_syntax(line, path)
     endwhile
 
     return line
-endfunc
-" }}}
+endfunc "}}}
 
-" s:eval_modeline(line, path) {{{
-func! s:eval_modeline(line, path)
+func! s:eval_modeline(line, path) "{{{
     let line = a:line
     " according to vim help, there are 2 types of modeline.
     "   [text]{white}{vi:|vim:|ex:}[white]{options}
@@ -197,11 +186,9 @@ func! s:eval_modeline(line, path)
             endif
         endfor
     endif
-endfunc
-" }}}
+endfunc "}}}
 
-" s:open_file_on_cursol() {{{
-func! s:open_file_on_cursol()
+func! s:open_file_on_cursol() "{{{
     " get path of template file
     let template_path = getline('.')
     if template_path == ''
@@ -223,11 +210,9 @@ func! s:open_file_on_cursol()
     if ftype != ''
         execute 'setlocal ft=' . ftype
     endif
-endfunc
-" }}}
+endfunc "}}}
 
-" s:close_list_buffer() {{{
-func! s:close_list_buffer()
+func! s:close_list_buffer() "{{{
     if winnr('$') != 1
         close
         " switch to caller window
@@ -238,11 +223,9 @@ func! s:close_list_buffer()
         execute winnr.'wincmd w'
     endif
     let s:caller_bufnr = -1
-endfunc
-" }}}
+endfunc "}}}
 
-" s:multi_setline(lines) {{{
-func! s:multi_setline(lines)
+func! s:multi_setline(lines) "{{{
     " delete all
     %delete _
 
@@ -256,11 +239,9 @@ func! s:multi_setline(lines)
     normal! ggdd
 
     call setreg('z', reg_z, reg_z_type)
-endfunc
-" }}}
+endfunc "}}}
 
-" s:show_files_list() {{{
-func! s:show_files_list()
+func! s:show_files_list() "{{{
 
     " return if window exists
     let winnr = bufwinnr(s:caller_bufnr)
@@ -297,8 +278,7 @@ func! s:show_files_list()
     nnoremap <buffer><silent> q     :call <SID>close_list_buffer()<CR>
 
     file __template__
-endfunc
-" }}}
+endfunc "}}}
 " }}}
 
 " COMMAND {{{
