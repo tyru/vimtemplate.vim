@@ -155,7 +155,8 @@ endfunction "}}}
 
 function! s:buffer_open() "{{{
     " get path of template file
-    let template_path = getline('.')
+    let relpath = getline('.')
+    let template_path = expand(g:vt_template_dir_path) . '/' . relpath
     if !filereadable(template_path)
         call s:warn(printf("can't read '%s'", template_path))
         return
@@ -167,9 +168,8 @@ function! s:buffer_open() "{{{
     let text = s:apply_template(text, template_path)
     call s:multi_setline(text)
 
-    let path = fnamemodify(template_path, ':t')
-    if has_key(g:vt_files_metainfo, path)
-        for [k, v] in items(g:vt_files_metainfo[path])
+    if has_key(g:vt_files_metainfo, relpath)
+        for [k, v] in items(g:vt_files_metainfo[relpath])
             if k ==# 'filetype'
                 let &l:filetype = v
             endif
@@ -221,6 +221,7 @@ function! s:show_files_list() "{{{
 
     " Write template files list to the buffer.
     let template_files_list = s:glob(template_dir . '/*')
+    call map(template_files_list, 'v:val[strlen(template_dir) + 1 :]')
     call s:multi_setline(template_files_list)
 
     setlocal bufhidden=wipe
