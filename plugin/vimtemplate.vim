@@ -1,20 +1,20 @@
 " vim:foldmethod=marker:fen:
 scriptencoding utf-8
 
-" INCLUDE GUARD {{{1
+" INCLUDE GUARD {{{
 if exists('g:loaded_vimtemplate') && g:loaded_vimtemplate != 0 | finish | endif
 let g:loaded_vimtemplate = 1
-" }}}1
-" SAVING CPO {{{1
+" }}}
+" SAVING CPO {{{
 let s:save_cpo = &cpo
 set cpo&vim
-" }}}1
+" }}}
 
-" SCOPED VARIABLES {{{1
+" SCOPED VARIABLES {{{
 let s:caller_bufnr = -1
 let s:cache_filetype_files = { 'cached':0, 'filenames':{} }
-" }}}1
-" GLOBAL VARIABLES {{{1
+" }}}
+" GLOBAL VARIABLES {{{
 if !exists('g:vt_template_dir_path')
     let g:vt_template_dir_path = '$HOME/.vim/template'
 endif
@@ -36,18 +36,18 @@ endif
 if !exists('g:vt_email')
     let g:vt_email = ''
 endif
-" }}}1
+" }}}
 
-" FUNCTION DEFINITION {{{1
-" s:warn(msg) {{{2
+" FUNCTION DEFINITION {{{
+" s:warn(msg) {{{
 func! s:warn(msg)
     echohl WarningMsg
     echo a:msg
     echohl None
 endfunc
-" }}}2
+" }}}
 
-" s:glob_path_list(path, expr) {{{2
+" s:glob_path_list(path, expr) {{{
 func! s:glob_path_list(path, expr)
     " get list of files
     let files = split(globpath(a:path, a:expr), '\n')
@@ -63,9 +63,9 @@ func! s:glob_path_list(path, expr)
 
     return files
 endfunc
-" }}}2
+" }}}
 
-" s:get_filetype_of(path) {{{2
+" s:get_filetype_of(path) {{{
 " NOTE: a:path must exist.
 func! s:get_filetype_of(path)
 
@@ -88,9 +88,9 @@ func! s:get_filetype_of(path)
         return ''
     endif
 endfunc
-" }}}2
+" }}}
 
-" s:apply_template(text, path) {{{2
+" s:apply_template(text, path) {{{
 func! s:apply_template(text, path)
     let text = a:text
     let [i, len] = [0, len(text)]
@@ -106,9 +106,9 @@ func! s:apply_template(text, path)
 
     return text
 endfunc
-" }}}2
+" }}}
 
-" s:expand_template_syntax(line, path) {{{2
+" s:expand_template_syntax(line, path) {{{
 func! s:expand_template_syntax(line, path)
     let line = a:line
     let regex = '\m<%\s*\(.\{-}\)\s*%>'
@@ -170,9 +170,9 @@ func! s:expand_template_syntax(line, path)
 
     return line
 endfunc
-" }}}2
+" }}}
 
-" s:eval_modeline(line, path) {{{2
+" s:eval_modeline(line, path) {{{
 func! s:eval_modeline(line, path)
     let line = a:line
     " according to vim help, there are 2 types of modeline.
@@ -194,9 +194,9 @@ func! s:eval_modeline(line, path)
         endfor
     endif
 endfunc
-" }}}2
+" }}}
 
-" s:open_file_on_cursol() {{{2
+" s:open_file_on_cursol() {{{
 func! s:open_file_on_cursol()
     " get path of template file
     let template_path = getline('.')
@@ -218,9 +218,9 @@ func! s:open_file_on_cursol()
         execute 'setlocal ft=' . ftype
     endif
 endfunc
-" }}}2
+" }}}
 
-" s:close_list_buffer() {{{2
+" s:close_list_buffer() {{{
 func! s:close_list_buffer()
     if winnr('$') != 1
         close
@@ -233,7 +233,7 @@ func! s:close_list_buffer()
     endif
     let s:caller_bufnr = -1
 endfunc
-" }}}2
+" }}}
 
 " s:multi_setline(lines) {{{
 func! s:multi_setline(lines)
@@ -253,7 +253,7 @@ func! s:multi_setline(lines)
 endfunc
 " }}}
 
-" s:show_files_list() {{{2
+" s:show_files_list() {{{
 func! s:show_files_list()
 
     " return if window exists
@@ -292,22 +292,22 @@ func! s:show_files_list()
 
     file __template__
 endfunc
-" }}}2
-" }}}1
+" }}}
+" }}}
 
-" COMMAND {{{1
+" COMMAND {{{
 if g:vt_command != ''
     execute 'command! ' . g:vt_command . ' call <SID>show_files_list()'
 endif
-" }}}1
+" }}}
 
-" MAPPING {{{1
+" MAPPING {{{
 if g:vt_mapping != ''
     execute 'nnoremap <silent><unique> ' . g:vt_mapping
                 \ . ' :call <SID>show_files_list()<CR>'
 endif
-" }}}1
+" }}}
 
-" RESTORE CPO {{{1
+" RESTORE CPO {{{
 let &cpo = s:save_cpo
-" }}}1
+" }}}
