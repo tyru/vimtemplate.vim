@@ -47,18 +47,11 @@ function! s:warn(msg) "{{{
     echohl None
 endfunction "}}}
 
-function! s:glob_path_list(path, expr) "{{{
-    " get list of files
-    let files = split(globpath(a:path, a:expr), '\n')
+function! s:glob(expr) "{{{
+    let files = split(glob(a:expr), '\n')
 
-    " TODO simplify
-
-    " delete dirname
     call map(files, 'fnamemodify(v:val, ":t")')
-    " get rid of '.' and '..'
     call filter(files, 'v:val !=# "." && v:val !=# ".."')
-    " add dirname
-    call map(files, 'a:path . "/" . v:val')
 
     return files
 endfunction "}}}
@@ -261,7 +254,8 @@ function! s:show_files_list() "{{{
     let s:caller_bufnr = bufnr('%')
 
     " write template files list to main buffer
-    let template_files_list = s:glob_path_list(expand(g:vt_template_dir_path), '*')
+    let template_files_list = s:glob(expand(g:vt_template_dir_path) . '/*')
+    call map(template_files_list, 'expand(g:vt_template_dir_path) . "/" . v:val')
     call s:multi_setline(template_files_list)
 
 
