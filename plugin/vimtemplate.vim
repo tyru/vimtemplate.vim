@@ -277,6 +277,8 @@ function! s:show_files_list() "{{{
     endif
 
     file `="__template__"`
+
+    setfiletype vimtemplate
 endfunction "}}}
 " }}}
 
