@@ -54,15 +54,15 @@ g:vt_template_dir_path			*g:vt_template_dir_path*
 	search files in this dir.
 	to specify multi-dirs, set paths joined with ",".
 
-g:vt_command					*g:vt_command*
-							(default:"VimTemplate")
-	command name.
-	if this is empty string, won't define the command.
+g:vt_no_command					*g:vt_no_command*
+							(default: 0)
+	If this is true,
+	does not create |:VimTemplate|.
 
-g:vt_mapping					*g:vt_mapping*
-							(default:"gt")
-	mapping.
-	if this is empty string, won't define the mapping.
+g:vt_no_default_mappings					*g:vt_no_default_mappings*
+							(default: 0)
+	If this is true,
+	does not create default mappings.
 
 g:vt_list_buf_height			*g:vt_list_buf_height*
 							(default:7)

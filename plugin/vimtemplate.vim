@@ -20,11 +20,11 @@ let s:cache_filetype_files = { 'cached':0, 'filenames':{} }
 if !exists('g:vt_template_dir_path')
     let g:vt_template_dir_path = '$HOME/.vim/template'
 endif
-if !exists('g:vt_command')
-    let g:vt_command = 'VimTemplate'
+if !exists('g:vt_no_command')
+    let g:vt_no_command = 0
 endif
-if !exists('g:vt_mapping')
-    let g:vt_mapping = 'gt'
+if !exists('g:vt_no_default_mappings')
+    let g:vt_no_default_mappings = 0
 endif
 if !exists('g:vt_list_buf_height')
     let g:vt_list_buf_height = 7
@@ -282,15 +282,16 @@ endfunction "}}}
 " }}}
 
 " COMMAND {{{
-if g:vt_command != ''
-    execute 'command! ' . g:vt_command . ' call <SID>show_files_list()'
+if !g:vt_no_command
+    command! VimTemplate call s:show_files_list()
 endif
 " }}}
 
 " MAPPING {{{
-if g:vt_mapping != ''
-    execute 'nnoremap <silent><unique> ' . g:vt_mapping
-                \ . ' :call <SID>show_files_list()<CR>'
+nnoremap <silent> <Plug>(vimtemplate-open)   :<C-u>call <SID>show_files_list()<CR>
+
+if !g:vt_no_default_mappings
+    nmap <unique> gt    <Plug>(vimtemplate-open)
 endif
 " }}}
 
