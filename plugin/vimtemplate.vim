@@ -38,6 +38,9 @@ endif
 if !exists('g:vt_email')
     let g:vt_email = ''
 endif
+if !exists('g:vt_buffer_no_default_mappings')
+    let g:vt_buffer_no_default_mappings = 0
+endif
 " }}}
 
 " FUNCTION DEFINITION {{{
@@ -268,8 +271,12 @@ function! s:show_files_list() "{{{
     setlocal nomodifiable
     setlocal noswapfile
 
-    nnoremap <buffer><silent> <CR>  :call <SID>open_file_on_cursol()<CR>
-    nnoremap <buffer><silent> q     :call <SID>close_list_buffer()<CR>
+    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-open)   :<C-u>call <SID>open_file_on_cursol()<CR>
+    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-close)  :<C-u>call <SID>close_list_buffer()<CR>
+    if !g:vt_buffer_no_default_mappings
+        nmap <buffer> <CR>  <Plug>(vimtemplate-buffer-open)
+        nmap <buffer> q     <Plug>(vimtemplate-buffer-close)
+    endif
 
     file __template__
 endfunction "}}}
