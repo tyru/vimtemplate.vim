@@ -184,7 +184,7 @@ function! s:eval_modeline(line, path) "{{{
     endif
 endfunction "}}}
 
-function! s:open_file_on_cursol() "{{{
+function! s:buffer_open() "{{{
     " get path of template file
     let template_path = getline('.')
     if template_path == ''
@@ -196,7 +196,7 @@ function! s:open_file_on_cursol() "{{{
         return
     endif
 
-    call s:close_list_buffer()
+    call s:buffer_close()
     " paste buffer into main buffer
     let text = readfile(template_path)
     let text = s:apply_template(text, template_path)
@@ -208,7 +208,7 @@ function! s:open_file_on_cursol() "{{{
     endif
 endfunction "}}}
 
-function! s:close_list_buffer() "{{{
+function! s:buffer_close() "{{{
     if winnr('$') != 1
         close
         " switch to caller window
@@ -269,8 +269,8 @@ function! s:show_files_list() "{{{
     setlocal nomodifiable
     setlocal noswapfile
 
-    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-open)   :<C-u>call <SID>open_file_on_cursol()<CR>
-    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-close)  :<C-u>call <SID>close_list_buffer()<CR>
+    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-open)   :<C-u>call <SID>buffer_open()<CR>
+    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-close)  :<C-u>call <SID>buffer_close()<CR>
     if !g:vt_buffer_no_default_mappings
         nmap <buffer> <CR>  <Plug>(vimtemplate-buffer-open)
         nmap <buffer> q     <Plug>(vimtemplate-buffer-close)
