@@ -196,7 +196,7 @@ function! s:buffer_open() "{{{
         return
     endif
 
-    call s:buffer_close()
+    close
     " paste buffer into main buffer
     let text = readfile(template_path)
     let text = s:apply_template(text, template_path)
@@ -206,19 +206,6 @@ function! s:buffer_open() "{{{
     if ftype != ''
         execute 'setlocal ft=' . ftype
     endif
-endfunction "}}}
-
-function! s:buffer_close() "{{{
-    if winnr('$') != 1
-        close
-        " switch to caller window
-        let winnr = bufwinnr(s:caller_bufnr)
-        if winnr == -1
-            return
-        endif
-        execute winnr.'wincmd w'
-    endif
-    let s:caller_bufnr = -1
 endfunction "}}}
 
 function! s:multi_setline(lines) "{{{
@@ -269,8 +256,22 @@ function! s:show_files_list() "{{{
     setlocal nomodifiable
     setlocal noswapfile
 
+    function! s:bufleave()
+        let winnr = bufwinnr(s:caller_bufnr)
+        if winnr == -1
+            return
+        endif
+        execute winnr 'wincmd w'
+
+        let s:caller_bufnr = -1
+    endfunction
+    augroup vimtemplate
+        autocmd!
+        autocmd BufLeave * call s:bufleave()
+    augroup END
+
     nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-open)   :<C-u>call <SID>buffer_open()<CR>
-    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-close)  :<C-u>call <SID>buffer_close()<CR>
+    nnoremap <buffer><silent> <Plug>(vimtemplate-buffer-close)  :<C-u>close<CR>
     if !g:vt_buffer_no_default_mappings
         nmap <buffer> <CR>  <Plug>(vimtemplate-buffer-open)
         nmap <buffer> q     <Plug>(vimtemplate-buffer-close)
