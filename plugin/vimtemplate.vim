@@ -53,7 +53,7 @@ function! s:glob(expr) "{{{
     return split(glob(a:expr), '\n')
 endfunction "}}}
 
-function! s:apply_template(text, path) "{{{
+function! s:compile_template(text, path) "{{{
     let text = a:text
     let [i, len] = [0, len(text)]
 
@@ -164,9 +164,15 @@ function! s:buffer_open() "{{{
 
     close
     " paste buffer into main buffer
-    let text = readfile(template_path)
-    let text = s:apply_template(text, template_path)
-    call s:multi_setline(text)
+    try
+        let text = readfile(template_path)
+    catch
+        call s:warn(v:exception)
+        return
+    endtry
+    let text = s:compile_template(text, template_path)
+    %delete _
+    call setline(1, text)
 
     if has_key(g:vt_files_metainfo, relpath)
         for [k, v] in items(g:vt_files_metainfo[relpath])
@@ -175,22 +181,6 @@ function! s:buffer_open() "{{{
             endif
         endfor
     endif
-endfunction "}}}
-
-function! s:multi_setline(lines) "{{{
-    " delete all
-    %delete _
-
-    let reg_z = getreg('z', 1)
-    let reg_z_type = getregtype('z')
-    let @z = join(a:lines, "\n")
-
-    " write all lines
-    silent put z
-    " delete the top of one waste blank line
-    normal! ggdd
-
-    call setreg('z', reg_z, reg_z_type)
 endfunction "}}}
 
 function! s:bufleave() "{{{
@@ -222,7 +212,7 @@ function! s:show_files_list() "{{{
     " Write template files list to the buffer.
     let template_files_list = s:glob(template_dir . '/*')
     call map(template_files_list, 'v:val[strlen(template_dir) + 1 :]')
-    call s:multi_setline(template_files_list)
+    call setline(1, template_files_list)
 
     setlocal bufhidden=wipe
     setlocal buftype=nofile
