@@ -2,7 +2,9 @@
 scriptencoding utf-8
 
 " INCLUDE GUARD {{{
-if exists('g:loaded_vimtemplate') && g:loaded_vimtemplate != 0 | finish | endif
+if exists('g:loaded_vimtemplate') && g:loaded_vimtemplate != 0
+    finish
+endif
 let g:loaded_vimtemplate = 1
 " }}}
 " SAVING CPO {{{
@@ -73,7 +75,9 @@ func! s:get_filetype_of(path)
         " save cache to s:cache_filetype_files
         for pair in split(g:vt_filetype_files, ',')
             let [fname_tail; filetype] = split(pair, '=')
-            if empty(filetype) | continue | endif
+            if empty(filetype)
+                continue
+            endif
 
             let s:cache_filetype_files.filenames[fname_tail] = filetype[0]
         endfor
@@ -200,7 +204,9 @@ endfunc
 func! s:open_file_on_cursol()
     " get path of template file
     let template_path = getline('.')
-    if template_path == '' | return | endif
+    if template_path == ''
+        return
+    endif
 
     if !filereadable(template_path)
         call s:warn(printf("can't read '%s'", template_path))
