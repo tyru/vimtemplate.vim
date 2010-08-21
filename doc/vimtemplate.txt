@@ -50,7 +50,7 @@ gt
 VARIABLES					*vimtemplate-variables* {{{
 
 g:vt_template_dir_path			*g:vt_template_dir_path*
-							(default:"$HOME/.vim/template")
+							(default:"~/.vim/template")
 	search files in this dir.
 	to specify multi-dirs, set paths joined with ",".
 
@@ -69,11 +69,8 @@ g:vt_list_buf_height			*g:vt_list_buf_height*
 	height of list buffer.
 	buffer shows you list of template files.
 
-g:vt_filetype_files			*g:vt_filetype_files*
+g:vt_files_metainfo			*g:vt_files_metainfo*
 							(default: "")
-	when you load one of these files or exec :setlocal ft=<filetype>.
-	search these files in your g:vt_template_dir_path.
-	e.g.: "java_template.java=java,cpp_template.cpp=cpp"
 
 g:vt_author					*g:vt_author*
 							(default: "")
@@ -159,27 +156,20 @@ this plugin also allows both <%filename%> and <% filename %>.
 EXAMPLE					*vimtemplate-example* {{{
 
 >
-	let g:vt_template_dir_path = expand("$HOME/.vim/template")
-	let g:vt_command = ""
-	let g:vt_author = "tyru"
-	let g:vt_email = "tyru.exe@gmail.com"
-	
-	let s:files_tmp = {
-	    \'cppsrc.cpp'    : "cpp",
-	    \'csharp.cs'     : "cs",
-	    \'csrc.c'        : "c",
-	    \'header.h'      : "c",
-	    \'hina.html'     : "html",
-	    \'javasrc.java'  : "java",
-	    \'perl.pl'       : "perl",
-	    \'perlmodule.pm' : "perl",
-	    \'python.py'     : "python",
-	    \'scala.scala'   : "scala",
-	    \'scheme.scm'    : "scheme",
-	    \'vimscript.vim' : "vim"
+	let g:vt_files_metainfo = {
+	\	'cppsrc.cpp'    : {'filetype': "cpp"},
+	\	'csharp.cs'     : {'filetype': "cs"},
+	\	'csrc.c'        : {'filetype': "c"},
+	\	'header.h'      : {'filetype': "c"},
+	\	'hina.html'     : {'filetype': "html"},
+	\	'javasrc.java'  : {'filetype': "java"},
+	\	'perl.pl'       : {'filetype': "perl"},
+	\	'perlmodule.pm' : {'filetype': "perl"},
+	\	'python.py'     : {'filetype': "python"},
+	\	'scala.scala'   : {'filetype': "scala"},
+	\	'scheme.scm'    : {'filetype': "scheme"},
+	\	'vimscript.vim' : {'filetype': "vim"},
 	\}
-	let g:vt_filetype_files = join(map(keys(s:files_tmp), 'v:val . "=" . s:files_tmp[v:val]'), ',')
-	unlet s:files_tmp
 
 }}}
 ==============================================================================
