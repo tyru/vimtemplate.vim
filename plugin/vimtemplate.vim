@@ -12,7 +12,6 @@ set cpo&vim
 
 " SCOPED VARIABLES {{{1
 let s:caller_bufnr = -1
-let s:tempname = ''
 let s:cache_filetype_files = { 'cached':0, 'filenames':{} }
 " }}}1
 " GLOBAL VARIABLES {{{1
