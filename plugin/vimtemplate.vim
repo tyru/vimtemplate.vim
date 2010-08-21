@@ -238,16 +238,16 @@ function! s:multi_setline(lines) "{{{
 endfunction "}}}
 
 function! s:show_files_list() "{{{
-
     " return if window exists
     let winnr = bufwinnr(s:caller_bufnr)
     if winnr != -1
-        execute winnr.'wincmd w'
+        execute winnr 'wincmd w'
         return
     endif
 
     " open list buffer
     execute g:vt_open_command
+
     " no template directory
     if !isdirectory(expand(g:vt_template_dir_path))
         close
@@ -261,8 +261,6 @@ function! s:show_files_list() "{{{
     call map(template_files_list, 'expand(g:vt_template_dir_path) . "/" . v:val')
     call s:multi_setline(template_files_list)
 
-
-    """ settings """
 
     setlocal bufhidden=wipe
     setlocal buftype=nofile
@@ -278,7 +276,7 @@ function! s:show_files_list() "{{{
         nmap <buffer> q     <Plug>(vimtemplate-buffer-close)
     endif
 
-    file __template__
+    file `="__template__"`
 endfunction "}}}
 " }}}
 
