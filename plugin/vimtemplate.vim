@@ -235,7 +235,6 @@ function! s:bufleave() "{{{
 endfunction "}}}
 
 function! s:show_files_list() "{{{
-    " return if window exists
     let winnr = bufwinnr(s:caller_bufnr)
     if winnr != -1
         execute winnr 'wincmd w'
@@ -247,15 +246,13 @@ function! s:show_files_list() "{{{
         return
     endif
 
-    " open list buffer
     execute g:vt_open_command
     let s:caller_bufnr = bufnr('%')
 
-    " write template files list to main buffer
+    " Write template files list to the buffer.
     let template_files_list = s:glob(expand(g:vt_template_dir_path) . '/*')
     call map(template_files_list, 'expand(g:vt_template_dir_path) . "/" . v:val')
     call s:multi_setline(template_files_list)
-
 
     setlocal bufhidden=wipe
     setlocal buftype=nofile
