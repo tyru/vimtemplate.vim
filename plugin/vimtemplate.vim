@@ -18,7 +18,7 @@ let s:cache_filetype_files = { 'cached':0, 'filenames':{} }
 " }}}
 " GLOBAL VARIABLES {{{
 if !exists('g:vt_template_dir_path')
-    let g:vt_template_dir_path = '$HOME/.vim/template'
+    let g:vt_template_dir_path = '~/.vim/template'
 endif
 if !exists('g:vt_no_command')
     let g:vt_no_command = 0
@@ -241,8 +241,9 @@ function! s:show_files_list() "{{{
         return
     endif
 
-    if !isdirectory(expand(g:vt_template_dir_path))
-        call s:warn("No such dir: " . expand(g:vt_template_dir_path))
+    let template_dir = expand(g:vt_template_dir_path)
+    if !isdirectory(template_dir)
+        call s:warn("No such dir: " . template_dir)
         return
     endif
 
@@ -250,8 +251,8 @@ function! s:show_files_list() "{{{
     let s:caller_bufnr = bufnr('%')
 
     " Write template files list to the buffer.
-    let template_files_list = s:glob(expand(g:vt_template_dir_path) . '/*')
-    call map(template_files_list, 'expand(g:vt_template_dir_path) . "/" . v:val')
+    let template_files_list = s:glob(template_dir . '/*')
+    call map(template_files_list, 'template_dir . "/" . v:val')
     call s:multi_setline(template_files_list)
 
     setlocal bufhidden=wipe
