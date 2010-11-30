@@ -171,7 +171,7 @@ function! s:buffer_open() "{{{
     if has_key(g:vt_files_metainfo, relpath)
         for [k, v] in items(g:vt_files_metainfo[relpath])
             if k ==# 'filetype'
-                let &l:filetype = v
+                execute 'setfiletype' v
             endif
         endfor
     endif
