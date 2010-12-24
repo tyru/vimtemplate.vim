@@ -2,7 +2,7 @@
 scriptencoding utf-8
 
 " INCLUDE GUARD {{{
-if exists('g:loaded_vimtemplate') && g:loaded_vimtemplate != 0
+if (exists('g:loaded_vimtemplate') && g:loaded_vimtemplate != 0) || &cp
     finish
 endif
 let g:loaded_vimtemplate = 1
