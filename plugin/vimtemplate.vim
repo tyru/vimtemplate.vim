@@ -179,12 +179,11 @@ endfunction "}}}
 
 function! s:bufleave() "{{{
     let winnr = bufwinnr(s:caller_bufnr)
+    let s:caller_bufnr = -1
     if winnr == -1
         return
     endif
     execute winnr 'wincmd w'
-
-    let s:caller_bufnr = -1
 endfunction "}}}
 
 function! s:show_files_list() "{{{
@@ -200,8 +199,8 @@ function! s:show_files_list() "{{{
         return
     endif
 
-    execute g:vt_open_command
     let s:caller_bufnr = bufnr('%')
+    execute g:vt_open_command
 
     " Write template files list to the buffer.
     let template_files_list = s:glob(template_dir . '/*')
